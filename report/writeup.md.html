@@ -1,0 +1,193 @@
+                    <meta charset="utf-8" emacsmode="-*- markdown -*">
+                            **CMSC848F - Assignment 1: Rendering Basics with PyTorch3D**
+                            Shantanu Parab
+                            sparab@umd.edu
+
+
+
+
+
+
+
+
+# 0. Setup 
+- These instruction assume that you have completed all the installation and setup steps requrired.
+- To recreate the results in this assignment, download the package and unzip into a folder.
+- Move into the package `assignment1_sparab`.
+- To render your first mesh run the following command, the results will be stored in the images folder.
+- **Result:** `images/cow_render.jpg`
+
+![Cow Render](../images/cow_render.jpg)
+
+**Command:**
+`python -m code.render_mesh`
+
+
+---
+
+# 1. Practicing with Cameras
+- In this section we will try to create 2 effects 1. 360 Camera View and 2. Dolly Zoom
+
+
+## 1.1 360 Renders
+
+Using **pytorch3d.renderer.cameras.look_at_view_transform** we get the camera poses such that the camera is facing the object. We change the azimuth
+in small increments which gives the illusion of the camera moving around the object. We get multiple images of the object from different camera angles.
+We then stitch the images together to form a gif.
+
+- **Result:** `images/render_360.gif`
+
+![Cow Render 360 View](../images/render_360.gif)
+
+
+**Command:**
+`python -m code.render_360`
+
+## 1.2 Dolly Zoom
+The Dolly Zoom effeect is created by changing the distance of the camera from object while changing the FOV such that the object appears to be of a constant size.
+This is done by utilizing the formula below.
+
+\begin{equation}
+distance = \frac{width}{2tan(\frac{fov}{2})}
+\end{equation}
+
+- **Result:** `images/dolly.gif`
+
+![Dolly Zoom Effect](../images/dolly.gif)
+
+**Command:**
+`python -m code.dolly_zoom`
+
+
+# 2. Practicing Meshes
+
+## 2.1 Tetrahedron
+
+- We will be creating a custom tetrahedron shape. The shape is stored in a form of vertices and faces in the `data/tetrahedron.obj` file
+- We will be rendering this file and viewing it in 360.
+- **Result:** `images/tetrahedron_render_360.gif`
+- **We will be using 4 vertices and 4 triangle faces to form a tetrahedron.**
+
+![Tetrahedron 360 View](../images/tetrahedron_render_360.gif)
+
+**Command:**
+`python -m code.render_360_tetrahedron`
+
+## 2.2 Cube
+- We will be creating a custom cube shape. The shape is stored in a form of vertices and faces in the `data/cube.obj` file
+- We will be rendering this file and viewing it in 360.
+- **Result:** `images/cube_render_360.gif`
+
+- **We will be using 8 vertices and 12 triangle faces to form a cube.**
+
+![Cube 360 View](../images/cube_render_360.gif)
+
+**Command:**
+`python -m code.render_360_cube`
+
+# 3. Retexturing Meshes
+
+- In this section we will be adding a color gradient to the cow rendering and viewing it in a 360 view.
+- **Result:** `images/render_360_color.gif`
+
+- **The colors chosen are color1=[0.0, 1.0, 1.0] and color2=[0.0, 0.0, 1.0]**
+- It starts with a shade of green & blue (emerald) and then ends with deep blue.
+
+![Color Gradient 360 View](../images/render_360_color.gif)
+
+**Command:**
+`python -m code.render_360_color`
+
+
+# 4. Camera Transformation
+
+- Here we will be doing camera transformations to get various views of the object.
+- **Result:** 
+        + `images/transform_cow_1.jpg`
+        + `images/transform_cow_2.jpg`
+        + `images/transform_cow_3.jpg`
+        + `images/transform_cow_4.jpg`
+        + `images/transform_cow_5.jpg`
+
+The fixed Rotation is a identity matrix, so it does not contribute to any rotation and the fixed translation matrix is a having a 
+translation of 3 along the Z-axis.
+
+In order to get the results given in the assignment we need to have the following relative Rotation and Translation.
+
+The relative Rotation need to be rotated 90 Anti ClockWise along Z-axis.
+
+![90 Anti-ClockWise about Z axis](../images/transform_cow_1.jpg)
+
+The relative Rotation need to be rotated 90 Anti ClockWise along Y-axis and the relative translation has to be adjusted to move by 3 units
+along the X-axis and Z-axis.
+
+![90 Anti-ClockWise about Y axis](../images/transform_cow_2.jpg)
+
+The relative translations has to move further along Z-axis by 3 units.
+
+![Translation along Z axis](../images/transform_cow_3.jpg)
+
+The relative translations has to move further along X-axis by 0.5 units.
+
+![Translation along X axis](../images/transform_cow_4.jpg)
+
+This is a custom orientation where the relative Rotation need to be rotated 45 ClockWise along Y-axis.
+
+![45 ClockWise about Z axis](../images/transform_cow_5.jpg)
+
+
+
+**Command:**
+`python -m code.camera_transforms`
+
+# 5. Generic 3D Representation
+
+## 5.1 Point Clouds from RGB-D (Plant)
+
+- We will be using a point cloud representation with color values and viewing it in 3D.
+- We will then combine multiple point clouds to get a dense 3D visulization in 360 view.
+- **Result:** `images/render_360_plant_1.gif`,`images/render_360_plant_2.gif`,`images/render_360_plant_3.gif`
+
+![Plant View 1](../images/render_360_plant_1.gif)![Plant View 2](../images/render_360_plant_2.gif)![Combine View](../images/render_360_plant_3.gif)
+**Command:**
+`python -m code.render_plant`
+
+## 5.2 Parametric Representation (Torus)
+
+- We will be using the parametric form of Torus to render a 3D point cloud using sampling and view it in 3D.
+- **Result:** `images/torus_parametric_render_360.gif`
+
+![Torus Parametric](../images/torus_parametric_render_360.gif)
+
+**Command:**
+`python -m code.render_torus --render parametric`
+
+## 5.3 Implicit Representation (Torus)
+
+- We will be using the implicit form of Torus to render a 3D mesh and view it in 3D.
+- **Result:** `images/torus_implicit_render_360.gif`
+
+![Torus Implicit](../images/torus_implicit_render_360.gif)
+
+**Command:**
+`python -m code.render_torus --render implicit`
+
+
+**Mesh v/s Point Cloud**
+
+Mesh rendering involves techiniques like Marching Cube algorihtm which allows genereatinon of complex shapes
+, but can be slower due to the iteraive nature of the algorithm. The memory usae is higher for complex shapes 
+as it requires to store volumetric representation.
+
+Point Clouds rendering are faster and memory-efficient and are useful for generatin accurate 
+representation of 3D surfaces with dense point rpresentations.
+
+
+
+
+<!-- Markdeep: --><style class="fallback">body{visibility:hidden;white-space:pre;font-family:monospace}</style><script src="markdeep.min.js" charset="utf-8"></script><script src="https://morgan3d.github.io/markdeep/latest/markdeep.min.js?" charset="utf-8"></script><script>window.alreadyProcessedMarkdeep||(document.body.style.visibility="visible")</script>
+
+
+
+
+
